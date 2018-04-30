@@ -3,5 +3,5 @@
 
 public interface BoardFormatter
 {
-
+    public void setBoardStyle(MancalaBoard board);
 }

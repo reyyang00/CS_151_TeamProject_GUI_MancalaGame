@@ -6,22 +6,22 @@ import javax.swing.JComponent;
 
 public class MancalaPit extends JComponent
 {
-	MancalaHole mancala;
+    MancalaHole mancala;
 
-	
 
-	 public MancalaPit()
-	 {		 
-		 mancala = new MancalaHole();
-		 repaint();
-	 
-	 }
-	 
 
-	 public void paintComponent(Graphics g)
-	 {
-		 Graphics2D g2 = (Graphics2D) g;
-		 mancala.draw(g2);
-	 }
+    public MancalaPit()
+    {
+        mancala = new MancalaHole();
+        repaint();
+
+    }
+
+
+    public void paintComponent(Graphics g)
+    {
+        Graphics2D g2 = (Graphics2D) g;
+        mancala.draw(g2);
+    }
 
 }
