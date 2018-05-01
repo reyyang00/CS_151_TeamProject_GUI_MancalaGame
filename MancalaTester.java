@@ -8,25 +8,25 @@ A class for testing the Mancala Game.
 */
 public class MancalaTester
 {
-	/**
-	   Creates a MancalaModel and attaches MancalaBoard
-	   @param args unused
-	*/
-	public static void main(String[] args)
-	{
+    /**
+     Creates a MancalaModel and attaches MancalaBoard
+     @param args unused
+     */
+    public static void main(String[] args)
+    {
 
-		MancalaModel model = new MancalaModel();
-	
-		MancalaBoard gameboard = new MancalaBoard(model);
-	
- 		System.out.println("hi");
+        MancalaModel model = new MancalaModel();
 
-	    model.attach(gameboard);
-	    
-	    
-//	    gameboard.stoneButtons();
-//	    gameboard.styleButtons();
 
-	
-	}
+        MancalaBoard gameboard = new MancalaBoard(model);
+        MancalaBoradContext context = new MancalaBoradContext(new PlainBoardStyle());
+        context.excuteSettingBoradStyle(gameboard);
+
+
+
+        model.attach(gameboard);
+        gameboard.setSelfPointer(gameboard);
+
+
+    }
 }
