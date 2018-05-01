@@ -33,12 +33,13 @@ public class PitComponent extends JComponent {
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
             // update the move
-            System.out.println("Mancala:" + dataModel.getManA().mancala.numberOfStones);
-            System.out.println("Mancala:" + dataModel.getManB().mancala.numberOfStones);
+
 
             updateMove();
             // System.out.println("The total move is:"+dataModel.getMove());
             dataModel.updateStatus(dataModel.getMove());
+            System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);
+            System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);
             //  System.out.println(dataModel.getMove());
 
             //this is update the data
