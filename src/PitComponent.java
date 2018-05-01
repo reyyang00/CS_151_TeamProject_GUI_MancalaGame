@@ -33,17 +33,21 @@ public class PitComponent extends JComponent {
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
             // update the move
-
+            System.out.println("Curent move before move:"+dataModel.getCurrentMoved());
+            dataModel.setCurrentMoved(1);
+            System.out.println("Curent move after move:"+dataModel.getCurrentMoved());
 
             updateMove();
             // System.out.println("The total move is:"+dataModel.getMove());
             dataModel.updateStatus(dataModel.getMove());
-            System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);
-            System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);
+
             //  System.out.println(dataModel.getMove());
 
             //this is update the data
             dataModel.update(id, hole.getNbStones());
+
+            System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);
+            System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);
             hole.setNbStones(0);
 
             repaint();

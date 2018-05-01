@@ -15,17 +15,17 @@ public class MancalaTester
     public static void main(String[] args)
     {
 
-        MancalaModel model = new MancalaModel();
+//        MancalaModel model = new MancalaModel();
 
 
-        MancalaBoard gameboard = new MancalaBoard(model);
+        MancalaBoard gameboard = new MancalaBoard();
         MancalaBoradContext context = new MancalaBoradContext(new SJSUBoradStyle());
         context.excuteSettingBoradStyle(gameboard);
 
 
       //  System.out.println("hi");
 
-        model.attach(gameboard);
+        gameboard.getDataModel().attach(gameboard);
         gameboard.setSelfPointer(gameboard);
 
 

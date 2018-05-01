@@ -24,4 +24,6 @@ public class MancalaPit extends JComponent
         mancala.draw(g2);
     }
 
+
+
 }

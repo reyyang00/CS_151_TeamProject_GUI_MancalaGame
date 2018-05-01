@@ -3,6 +3,7 @@
 
 
 import java.util.ArrayList;
+import javax.swing.*;
 import javax.swing.event.*;
 
 
@@ -12,11 +13,12 @@ import javax.swing.event.*;
 public class MancalaModel {
 
 
-    private int playerUndotime;
-
     ArrayList<PitComponent> data = new ArrayList<>();
     ArrayList<PitComponent> preStatus = new ArrayList<>(12);
-    ArrayList<MancalaPit> manStates = new ArrayList<>(2);
+    ArrayList<MancalaPit> preManStates = new ArrayList<>(2);
+
+    MancalaPlayer playerA, playerB;
+
 
     ArrayList[] status = new ArrayList[3];
     MancalaPit manA;
@@ -27,6 +29,9 @@ public class MancalaModel {
     int playerTurn = 2;            // stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB
     private int move = 0;    // use for record the play status
     boolean initializationDone = false;
+    private int currentMoved =0;  //use for check if player is move, 0 not move, 1 move. if it is moved call undo function then current
+                                    //  play's undo time --
+                                    // really useful for undo fuction.
 
 
     public MancalaPit getManA() {
@@ -45,21 +50,6 @@ public class MancalaModel {
         this.manB = manB;
     }
 
-    public int getPlayerUndotime() {
-        return playerUndotime;
-    }
-
-    public void setPlayerUndotime(int playerUndotime) {
-        this.playerUndotime = playerUndotime;
-    }
-
-    public void increasePlayerUndotime() {
-        if (this.playerUndotime == 3) {
-            this.playerUndotime = 0;
-        } else
-            this.playerUndotime++;
-
-    }
 
     public int getMove() {
         return move;
@@ -72,9 +62,6 @@ public class MancalaModel {
     public void addHole(PitComponent pitComponent) {
         data.add(pitComponent);
         preStatus.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
-        manStates.add(new MancalaPit());
-
-
     }
 
     public void initializeStatus() {
@@ -86,6 +73,10 @@ public class MancalaModel {
         for (int i = 0; i < preStatus.size(); i++) {
             preStatus.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
         }
+
+        preManStates.get(0).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
+        preManStates.get(1).mancala.setNumberOfStones(manB.mancala.getNumberOfStones());
+
     }
 
 
@@ -95,9 +86,9 @@ public class MancalaModel {
     public MancalaModel() {
         listeners = new ArrayList();
         initializeStatus();
-        playerUndotime = 0;
-        initializeManAB();
 
+        initializePlayerAB();
+//        initializeManAB();
     }
 
     /**
@@ -240,20 +231,41 @@ public class MancalaModel {
     /**
      * XXXX
      */
-    public void undoFuntion(int playerMove) {
-        if (move < 1) {
-            initializeStones();
-            initializeManAB();
+    public void undoFuntion() {
+        System.out.println("Curent move:"+currentMoved);
+        if(playerA.getTotalUndoLeft()>0||playerB.getTotalUndoLeft()>0) {
+            if (currentMoved==1) {
+                if (move < 1) {
+                    initializeStones();
+                    manA.mancala.setNumberOfStones(0);
+                    manB.mancala.setNumberOfStones(0);
 
-        } else {
 
-            for (int i = 0; i < 12; i++) {
-                data.get(i).hole.setNbStones(preStatus.get(i).hole.getNbStones());
+                } else {
+
+                    for (int i = 0; i < 12; i++) {
+                        data.get(i).hole.setNbStones(preStatus.get(i).hole.getNbStones());
+                    }
+
+                    manA.mancala.setNumberOfStones(preManStates.get(0).mancala.getNumberOfStones());
+                    manB.mancala.setNumberOfStones(preManStates.get(1).mancala.getNumberOfStones());
+
+
+                }
+                if (playerTurn == 0) {// playA is moving
+                    playerA.decreaseUndotime();
+                } else {
+                    playerB.decreaseUndotime();
+                }
             }
-
         }
+        setCurrentMoved(0);
+        System.out.println("playerA undotime left:"+playerA.getTotalUndoLeft());
+        System.out.println("playerB undotime left:"+playerB.getTotalUndoLeft());
+        System.out.println("Curent move:"+currentMoved);
         ChangeListener l = (ChangeListener) listeners.get(0);
         l.stateChanged(new ChangeEvent(this));
+
     }
 
 
@@ -279,12 +291,25 @@ public class MancalaModel {
 
     public void initializeManAB() {
         for (int i = 0; i < 2; i++) {
-            manStates.add(new MancalaPit());
+            preManStates.add(new MancalaPit());
         }
+        preManStates.get(0).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
+        preManStates.get(1).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
 
     }
 
+    public void initializePlayerAB() {
+        playerA = new MancalaPlayer(3);
+        playerB = new MancalaPlayer(3);
+    }
 
+    public int getCurrentMoved() {
+        return currentMoved;
+    }
+
+    public void setCurrentMoved(int currentMoved) {
+        this.currentMoved = currentMoved;
+    }
 }
 
 

@@ -46,4 +46,11 @@ public class MancalaHole
         numberOfStones++;
     }
 
+    public int getNumberOfStones() {
+        return numberOfStones;
+    }
+
+    public void setNumberOfStones(int numberOfStones) {
+        this.numberOfStones = numberOfStones;
+    }
 }

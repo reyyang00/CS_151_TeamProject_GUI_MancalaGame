@@ -19,6 +19,7 @@ public class MancalaBoard extends JFrame implements ChangeListener
     private BoardFormatter strategy;
     private MancalaBoard selfPointer; // a reference pointing to Mancala Frame, use to endGame function.
     private ArrayList a;
+
     private MancalaModel dataModel;
     private ArrayList<PitComponent> status;
 
@@ -73,11 +74,10 @@ public class MancalaBoard extends JFrame implements ChangeListener
      Functions as View and Controller at the same time
      @param data the data that is displayed on the MancalaBoard
      */
-    public MancalaBoard(MancalaModel data)
+    public MancalaBoard()
     {
-
-        this.dataModel = data;
-        this.status = new ArrayList<PitComponent>(12);
+        this.dataModel = new MancalaModel();
+        this.status = new ArrayList<>(12);
         this.setLayout(new BorderLayout());
         this.setResizable(false);
 
@@ -209,6 +209,8 @@ public class MancalaBoard extends JFrame implements ChangeListener
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.show();
+
+        dataModel.initializeManAB();
     }
 
 
@@ -310,8 +312,8 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
 
                 } else {
-                    dataModel.undoFuntion(dataModel.getPlayerUndotime());
-                    dataModel.increasePlayerUndotime();
+                    dataModel.undoFuntion();
+                   // dataModel.increasePlayerUndotime();
                     System.out.println("undo clicked");
                     newStringB = "Undo";
                     newStringA = "End Game";
@@ -339,5 +341,14 @@ public class MancalaBoard extends JFrame implements ChangeListener
     public void updateStatus (ArrayList < PitComponent > list) {
 
     }
+
+    public MancalaModel getDataModel() {
+        return dataModel;
+    }
+
+    public void setDataModel(MancalaModel dataModel) {
+        this.dataModel = dataModel;
+    }
+
 
 }
