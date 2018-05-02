@@ -32,6 +32,8 @@ public class MancalaModel {
     boolean lastInOwnMancala = false;
     boolean didUndo = false;
     boolean changePlayerFlag = false;
+    int endOfGame = 0;
+//    String outputString = "buba";
 
 
     public MancalaPit getManA() {
@@ -178,7 +180,7 @@ public class MancalaModel {
         }
 
         	
-        if (value > 0)
+        if (value > 0 && flag)
         {
 
             manA.mancala.addStone();
@@ -276,7 +278,7 @@ public class MancalaModel {
         if(changePlayerFlag)
           playerTurn = changePlayerOrder(playerTurn);    
 
-        int endOfGame = checkEndOfGameCondition();
+        endOfGame = checkEndOfGameCondition();
 
         if (endOfGame > 0) {
             playerTurn = 3;        // end of game. disable all buttons
@@ -428,82 +430,83 @@ public class MancalaModel {
      */
     public void undoFuntion()
     {
-
-    	if(lastInOwnMancala == true)
+    	if(endOfGame == 0)
     	{
-            playerTurn = changePlayerOrder(playerTurn);
-
+	    	if(lastInOwnMancala == true)
+	    	{
+	            playerTurn = changePlayerOrder(playerTurn);
+	
+	    	}
+	    	
+	        if (playerTurn == 0 && playerB.getUndoTimeLeft() > 0 )		// Player B presses undo
+	        {
+	            if (didUndo == false)
+	            {
+	                for (int i = 0; i < previousState.size(); i++)
+	                {
+	                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
+	                }
+	
+	                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+	                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
+	
+	    //            if (lastInOwnMancala == false)
+	    //            {
+	                    playerTurn = changePlayerOrder(playerTurn);
+	    //            }
+	
+	  //              playerGoesAgain = false;
+	
+	                ChangeListener l = (ChangeListener) listeners.get(0);
+	                l.stateChanged(new ChangeEvent(this));
+	                
+	                playerB.decreaseUndoTimeLeft();
+	
+	            }
+	            
+	            didUndo = true;
+	
+	            
+	        }
+	        else if (playerTurn == 1 && playerA.getUndoTimeLeft() > 0)
+	        {
+	            if (didUndo == false)
+	            {
+	                for (int i = 0; i < previousState.size(); i++)
+	                {
+	                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
+	                }
+	
+	                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+	                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
+	
+	    //            if (lastInOwnMancala == false)
+	    //            {
+	                    playerTurn = changePlayerOrder(playerTurn);
+	     //           }
+	
+	         //       playerGoesAgain = false;
+	
+	                ChangeListener l = (ChangeListener) listeners.get(0);
+	                l.stateChanged(new ChangeEvent(this));
+	                
+	                playerA.decreaseUndoTimeLeft();
+	
+	            }
+	
+	            didUndo = true;
+	
+	        }
+	        
+	///    	if(lastInOwnMancala == true)
+	//    	{
+	 //           didUndo = true;
+	
+	   // 	}
+	        
+	        System.out.println("playerA undo time left:" + playerA.getUndoTimeLeft());
+	        System.out.println("playerB undo time left:" + playerB.getUndoTimeLeft());
     	}
-    	
-        if (playerTurn == 0 && playerB.getUndoTimeLeft() > 0 )		// Player B presses undo
-        {
-            if (didUndo == false)
-            {
-                for (int i = 0; i < previousState.size(); i++)
-                {
-                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
-                }
-
-                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
-                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
-
-    //            if (lastInOwnMancala == false)
-    //            {
-                    playerTurn = changePlayerOrder(playerTurn);
-    //            }
-
-  //              playerGoesAgain = false;
-
-                ChangeListener l = (ChangeListener) listeners.get(0);
-                l.stateChanged(new ChangeEvent(this));
-                
-                playerB.decreaseUndoTimeLeft();
-
-            }
-            
-            didUndo = true;
-
-            
-        }
-        else if (playerTurn == 1 && playerA.getUndoTimeLeft() > 0)
-        {
-            if (didUndo == false)
-            {
-                for (int i = 0; i < previousState.size(); i++)
-                {
-                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
-                }
-
-                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
-                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
-
-    //            if (lastInOwnMancala == false)
-    //            {
-                    playerTurn = changePlayerOrder(playerTurn);
-     //           }
-
-         //       playerGoesAgain = false;
-
-                ChangeListener l = (ChangeListener) listeners.get(0);
-                l.stateChanged(new ChangeEvent(this));
-                
-                playerA.decreaseUndoTimeLeft();
-
-            }
-
-            didUndo = true;
-
-        }
-        
-///    	if(lastInOwnMancala == true)
-//    	{
- //           didUndo = true;
-
-   // 	}
-        
-        System.out.println("playerA undo time left:" + playerA.getUndoTimeLeft());
-        System.out.println("playerB undo time left:" + playerB.getUndoTimeLeft());
-
     }
 
 

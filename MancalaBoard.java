@@ -224,6 +224,21 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
             dataModel.manA.repaint();
             dataModel.manB.repaint();
+            
+            
+            if(dataModel.endOfGame > 0)
+            {
+            	outputField.setBackground(Color.GREEN);	
+                if (dataModel.endOfGame == 1)
+                    outputField.setText("PLAYER A WINS");
+                if (dataModel.endOfGame == 2)
+                    outputField.setText("PLAYER B WINS");
+                if (dataModel.endOfGame == 3)
+                    outputField.setText("It's a tie");
+                
+            }
+            
+            
 
         }
 
