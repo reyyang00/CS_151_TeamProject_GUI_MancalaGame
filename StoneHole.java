@@ -2,6 +2,8 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 
 import javax.swing.Icon;
 
@@ -10,6 +12,18 @@ public class StoneHole
 {
 
 	private int numberOfStones;
+	private Color colorA;
+	private Color colorB;
+	private RectangularShape shape = new Ellipse2D.Double(18, 0, 45, 45);
+	
+//	private Color = Color.Red;
+	
+	public void setSyle(Color a, Color b, RectangularShape s)
+	{
+		colorA = a;
+		colorB = b;
+		shape = s;
+	}
 	
 	
 	 public StoneHole()
@@ -20,9 +34,14 @@ public class StoneHole
 	 public void draw(Graphics2D g2)
 	 {
          g2.setStroke(new BasicStroke(2));
+         
+         g2.setColor(colorA);
+           
+         g2.draw(shape);
+           
+         g2.setColor(colorB);
 
-		 Ellipse2D.Double hole = new Ellipse2D.Double(18, 0, 45, 45);
-		 g2.draw(hole);
+
 
 		 if(numberOfStones == 0)
 		 {}

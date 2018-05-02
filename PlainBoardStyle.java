@@ -2,6 +2,9 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,14 +16,24 @@ public class PlainBoardStyle implements BoardFormatter {
 	        board.getMancaB().setBackground(Color.GRAY);
 
 
-//	        BufferedImage myPicture = null;
-//	        try {
-//	            myPicture = ImageIO.read(new File("src/resource/sjsu.gif"));
-//	        } catch (IOException e) {
-//	            e.printStackTrace();
-//	        }
-//	        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//	        board.getSouthPanel().add(picLabel);
 
 	    }
+	   
+	   
+	    public Color getColorA()
+	    {
+	    	return Color.BLACK;
+	    }
+	    
+	    public Color getColorB()
+	    {
+	    	return Color.BLACK;
+	    }
+	    
+	    public RectangularShape getShape()
+	    {
+	    	return new Ellipse2D.Double(18, 0, 45, 45);
+	    }
+	    
+	    
 	}

@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.*;
 import java.util.ArrayList;
-import java.awt.Graphics2D;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
@@ -17,10 +16,14 @@ import java.awt.geom.Rectangle2D;
 public class MancalaBoard extends JFrame implements ChangeListener
 {
     private BoardFormatter strategy;
+    private MancalaBoradContext newContext;
     private MancalaBoard selfPointer; // a reference pointing to Mancala Frame, use to endGame function.
     private ArrayList a;
     private MancalaModel dataModel;
     private ArrayList<PitComponent> status;
+    
+    Font playerFont = new Font("Bahnschrift", Font.PLAIN, 20);
+    Font mancalaFont = new Font("Bahnschrift", Font.PLAIN, 17);
 
     JPanel mancaA, mancaB;
 
@@ -82,8 +85,7 @@ public class MancalaBoard extends JFrame implements ChangeListener
             this.setResizable(false);
 
 
-            Font playerFont = new Font("Bahnschrift", Font.PLAIN, 20);
-            Font mancalaFont = new Font("Bahnschrift", Font.PLAIN, 17);
+
 
 
             outputField.setText("How many stones per field?");
@@ -230,6 +232,22 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
         }
 
+        
+        public void style(BoardFormatter updatedStyle)
+        {
+        	newContext = new MancalaBoradContext(updatedStyle);
+        	newContext.excuteSettingBoradStyle(selfPointer);
+        	
+        	for(int i = 0; i < 12; i++)
+        	{
+        		dataModel.data.get(i).hole.setSyle(updatedStyle.getColorA(), updatedStyle.getColorB(), updatedStyle.getShape());
+        	}
+        	
+        	stateChanged(new ChangeEvent(this));
+        }
+        
+        
+        
 
         /**
          */
@@ -257,6 +275,9 @@ public class MancalaBoard extends JFrame implements ChangeListener
                         newStringA = "End Game";
                         newStringB = "Undo";
                         
+                        style(new USABoradStyle());
+   
+                     
                         dataModel.initializationDone = true;			// signal that user is done with initialization (chose # stones and style)
 
                         outputField.setText("Click 'Undo' to undo your turn");
@@ -265,8 +286,7 @@ public class MancalaBoard extends JFrame implements ChangeListener
                     } else {
 
                         selfPointer.dispose();
-//                    System.out.println("Cliced");
-//                    dataModel.endgame();
+
                         newStringA = "End Game";
                         newStringB = "Undo";
                     }
@@ -299,6 +319,8 @@ public class MancalaBoard extends JFrame implements ChangeListener
                         dataModel.boardStyle = 2;
                         newStringB = "Undo";
                         newStringA = "End Game";
+                        style(new SJSUBoradStyle());
+
                         
                         dataModel.initializationDone = true;			// signal that user is done with initialization (chose # stones and style)
 

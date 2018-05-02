@@ -43,8 +43,8 @@ public class PitComponent extends JComponent
      		   {
             	
             		// update the move
-            		System.out.println("Mancala:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
-            		System.out.println("Mancala:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
+            		System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
+            		System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
 	
 	
 		            // System.out.println("The total move is:"+dataModel.getMove());
@@ -52,8 +52,10 @@ public class PitComponent extends JComponent
 		            //  System.out.println(dataModel.getMove());
 		
 		            //this is update the data
-		            dataModel.update(id, hole.getNbStones());
-		            hole.setNbStones(0);
+            		int stonesToDistribute = hole.getNbStones();
+//		            hole.setNbStones(0);
+
+		            dataModel.update(id, stonesToDistribute);
 		
 		            repaint();
      		   }
