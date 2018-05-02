@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 
-//PitComponent holds the stones.
+/** PitComponent holds the stones.
+ * 
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 
 public class PitComponent extends JComponent
 {
@@ -17,7 +21,10 @@ public class PitComponent extends JComponent
     ArrayList<PitComponent> previousStatus = new ArrayList<PitComponent>();
     final int STATUSCOUNTER = 1;
     int mo;
-
+    
+    /**
+     * Constructor that references the Model MancalaModel
+     */
     public PitComponent(MancalaModel data, int id) {
         this.id = id;
         dataModel = data;
@@ -26,6 +33,9 @@ public class PitComponent extends JComponent
         addMouseListener(listeners);
     }
 
+    /**
+     * MouseListener class containing a method that updates the Mancala for each player
+     */
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
         	
@@ -69,7 +79,9 @@ public class PitComponent extends JComponent
 //        dataModel.getData().get()
 //    }
 
-
+    /**
+     * Draws the Mancala pit for each player
+     */
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         hole.draw(g2);

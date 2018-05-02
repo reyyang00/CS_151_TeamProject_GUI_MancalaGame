@@ -7,6 +7,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Concrete strategy with another style for the Mancala Board
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class SJSUBoradStyle implements BoardFormatter {
     @Override
     public void setBoardStyle(MancalaBoard board) {
@@ -33,16 +38,25 @@ public class SJSUBoradStyle implements BoardFormatter {
 
     }
     
+    /**
+     * Gets the color blue for MancalaA
+     */
     public Color getColorA()
     {
     	return Color.BLUE;
     }
     
+    /**
+     * Gets the color gray for MancalaB
+     */
     public Color getColorB()
     {
     	return Color.GRAY;
     }
     
+    /**
+     * Get a reference of the shape for the Mancala Board
+     */
     public RectangularShape getShape()
     {
     	return new Rectangle2D.Double(18, 0, 45, 45);

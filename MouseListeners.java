@@ -1,6 +1,11 @@
 import java.awt.Point;
 import java.awt.event.*;
-
+/**
+ * MouseListener class required for actions requiring player to press the mouse 
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim 
+ *
+ */
 public class  MouseListeners extends MouseAdapter
 {
 	
