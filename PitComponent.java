@@ -26,11 +26,6 @@ public class PitComponent extends JComponent
         addMouseListener(listeners);
     }
 
-    public void updateMove() {
-        mo = dataModel.getMove();
-        dataModel.setMove(mo + STATUSCOUNTER);
-    }
-
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
         	
@@ -52,9 +47,8 @@ public class PitComponent extends JComponent
             		System.out.println("Mancala:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
 	
 	
-		            updateMove();
 		            // System.out.println("The total move is:"+dataModel.getMove());
-		            dataModel.updateStatus(dataModel.getMove());
+//		            dataModel.updateStatus();
 		            //  System.out.println(dataModel.getMove());
 		
 		            //this is update the data

@@ -15,18 +15,20 @@ public class MancalaModel {
     private int playerUndotime;
 
     ArrayList<PitComponent> data = new ArrayList<>();
-    ArrayList<PitComponent> statusOne = new ArrayList<>(12);
-    ArrayList<PitComponent> statusTwo = new ArrayList<>(12);
-    ArrayList<PitComponent> statusThree = new ArrayList<>(12);
+    ArrayList<PitComponent> previousState = new ArrayList<>(12);
+
     ArrayList[] status = new ArrayList[3];
-    MancalaPit manA;
-    MancalaPit manB;
+    MancalaPit manA = new MancalaPit();
+    MancalaPit previousManA = new MancalaPit();
+    MancalaPit manB = new MancalaPit();
+    MancalaPit previousManB = new MancalaPit();
+
     ArrayList listeners;
     int numberStones;
     int boardStyle;
-    int playerTurn = 2;			// stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB
-    private int move = 0;	// use for record the play status
+    int playerTurn = 2;			// stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB, 2=Game not initialized
     boolean initializationDone = false;
+    boolean playerGoesAgain = false;
 
 
     public MancalaPit getManA() {
@@ -61,59 +63,11 @@ public class MancalaModel {
 
     }
 
-    public int getMove() {
-        return move;
-    }
 
-    public void setMove(int move) {
-        this.move = move;
-    }
 
     public void addHole(PitComponent pitComponent) {
         data.add(pitComponent);
-        statusOne.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
-        statusTwo.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
-        statusThree.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
-    }
-
-    public void initializeStatus() {
-        status[0] = statusOne;
-        status[1] = statusTwo;
-        status[2] = statusThree;
-    }
-
-    public void updateStatus(int move) {
-
-
-        //move 1;
-        if (move <= 1) {
-            for (int i = 0; i < 12; i++) {
-                statusThree.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-                statusTwo.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-                statusOne.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-            }
-
-
-        }
-        //move 2;
-        if (move == 2) {
-
-            for (int i = 0; i < 12; i++) {
-                //data.get(i).hole.addStone();
-                statusTwo.get(i).hole.setNbStones(statusThree.get(i).hole.getNbStones());
-                statusThree.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-            }
-        }
-        //move 3;
-        if (move >= 3) {
-            for (int i = 0; i < 12; i++) {
-                //data.get(i).hole.addStone();
-                statusOne.get(i).hole.setNbStones(statusTwo.get(i).hole.getNbStones());
-                statusTwo.get(i).hole.setNbStones(statusThree.get(i).hole.getNbStones());
-                statusThree.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-            }
-        }
-        //move is greater than 3;
+        previousState.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
     }
 
 
@@ -122,7 +76,6 @@ public class MancalaModel {
      */
     public MancalaModel() {
         listeners = new ArrayList();
-        initializeStatus();
         playerUndotime = 0;
 
     }
@@ -147,6 +100,24 @@ public class MancalaModel {
     }
 
 
+    
+    public void updateStatus()
+    {
+
+    	for(int i = 0; i < previousState.size(); i++)
+    	{
+        	previousState.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
+    	}
+    	
+    	previousManA.mancala.numberOfStones = manA.mancala.numberOfStones;
+    	previousManB.mancala.numberOfStones = manB.mancala.numberOfStones;
+
+
+
+    }
+    
+    
+    
     /**
      * Change the data in the model at a particular location
      *
@@ -155,6 +126,9 @@ public class MancalaModel {
      */
     public void update(int location, int value)
     {
+    	updateStatus();
+    	
+    	
 	 	   if(location < 6)				// a pit of Player B was selected
 	 	   {			   
 	 		   
@@ -173,6 +147,7 @@ public class MancalaModel {
 		 		   
 		 		   if(value == 0)
 		 		   {
+		 			   playerGoesAgain = true;
 			 		   playerTurn = changePlayerOrder(playerTurn);
 
 		 		   }
@@ -216,7 +191,10 @@ public class MancalaModel {
 	 			   counter--;
 	 			   
 	 			   if(counter == 0)
-	 			   {   playerTurn = changePlayerOrder(playerTurn);}
+	 			   {   playerTurn = changePlayerOrder(playerTurn);
+	 			   		playerGoesAgain = true;
+
+	 			   }
 
 		
 	 		   }
@@ -287,27 +265,21 @@ public class MancalaModel {
     /**
      * XXXX
      */
-    public void undoFuntion(int playerMove) {
-        if (move < 1) {
-            initializeStones();
+    public void undoFuntion(int playerMove)
+    {
+    	for(int i = 0; i < previousState.size(); i++)
+    	{
+        	data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
+    	}
+    	
+    	manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+    	manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
 
-        } else {
-
-
-            if (playerMove == 1) {
-                for (int i = 0; i < 12; i++) {
-                    data.get(i).hole.setNbStones(statusThree.get(i).hole.getNbStones());
-                }
-            } else if (playerMove == 2) {
-                for (int i = 0; i < 12; i++) {
-                    data.get(i).hole.setNbStones(statusTwo.get(i).hole.getNbStones());
-                }
-            } else if (playerMove == 3) {
-                for (int i = 0; i < 12; i++) {
-                    data.get(i).hole.setNbStones(statusThree.get(i).hole.getNbStones());
-                }
-            }
-        }
+    	if(playerGoesAgain == false)
+    	{   playerTurn = changePlayerOrder(playerTurn);
+    	}
+    	
+		playerGoesAgain = false;
 
         ChangeListener l = (ChangeListener) listeners.get(0);
         l.stateChanged(new ChangeEvent(this));
