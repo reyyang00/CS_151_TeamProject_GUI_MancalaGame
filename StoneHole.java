@@ -7,7 +7,11 @@ import java.awt.geom.RectangularShape;
 
 import javax.swing.Icon;
 
-
+/**
+ * This class is to design the stones used for the Mancala Board
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class StoneHole
 {
 
@@ -18,6 +22,12 @@ public class StoneHole
 	
 //	private Color = Color.Red;
 	
+	/**
+	 * This method sets the design of the stones for each Mancala
+	 * @param a Color for Mancala A
+	 * @param b Color for Mancala B
+	 * @param s	Shape for the stones 
+	 */
 	public void setSyle(Color a, Color b, RectangularShape s)
 	{
 		colorA = a;
@@ -25,12 +35,17 @@ public class StoneHole
 		shape = s;
 	}
 	
-	
+	/**
+	 * Initializing the number of stones to be 0
+	 */
 	 public StoneHole()
 	 {
 		 numberOfStones = 0;																									/// CHANGE LATER
 	 }
 	 
+	 /**
+	  * Draw method to create the stones
+	  */
 	 public void draw(Graphics2D g2)
 	 {
          g2.setStroke(new BasicStroke(2));
@@ -78,31 +93,46 @@ public class StoneHole
 
 	 }
 	 
+	 /**
+	  * Getter for the number of stones
+	  * @return	Number of stones
+	  */
 	 public int getNbStones()
 	 {
 	
 		 return numberOfStones;
 	 }
 	 
-	 
+	 /**
+	  * Setter used for setting the number of stones
+	  * @param nbStones	Number of stones
+	  */
 	 public void setNbStones(int nbStones)
 	 {
 		 numberOfStones = nbStones;
 	 }
 	 
-	 
+	 /**
+	  * Method used to increment the number of stones
+	  */
 	 public void addStone()
 	 {
 		 numberOfStones++;
 	 }
 	 
-
+	 /**
+	  * Method used to draw one hole
+	  */
 	 private void draw1(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
 			 g2.draw(point1);
 			 g2.fill(point1);
 	 }
+	 
+	 /**
+	  * Method used to draw two holes
+	  */
 	 private void draw2(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -115,6 +145,10 @@ public class StoneHole
 			 g2.fill(point2);
 
 	 }
+	 
+	 /**
+	  * Method used to draw three holes
+	  */
 	 private void draw3(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -129,6 +163,10 @@ public class StoneHole
 			 g2.fill(point3);
 
 	 }
+	 
+	 /**
+	  * Method used to draw four holes
+	  */
 	 private void draw4(Graphics2D g2)
 	 {
 		Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -146,6 +184,9 @@ public class StoneHole
 		 g2.fill(point4);
 	 }
 	 
+	 /**
+	  * Method used to draw five holes
+	  */
 	 private void draw5(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -165,6 +206,10 @@ public class StoneHole
 			 g2.draw(point5);
 			 g2.fill(point5);
 	 }
+	 
+	 /**
+	  * Method used to draw six holes
+	  */
 	 private void draw6(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(25, 10, 4, 4);
@@ -188,6 +233,9 @@ public class StoneHole
 			 g2.fill(point6);
 	 }
 
+	 /**
+	  * Method used to draw more holes
+	  */
 	 private void drawMore(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(25, 10, 4, 4);

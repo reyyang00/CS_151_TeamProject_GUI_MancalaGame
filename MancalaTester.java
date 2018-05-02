@@ -3,8 +3,9 @@ import java.util.ArrayList;
 // CS 151 - Project Group SSR
 // MancalaTester.java
 
-/**
-A class for testing the Mancala Game.
+/** A class for testing the Mancala Game.
+ *  @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ *  @version CS151 Dr. Kim 
 */
 public class MancalaTester
 {

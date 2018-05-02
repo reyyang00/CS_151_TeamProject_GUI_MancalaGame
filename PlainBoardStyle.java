@@ -8,6 +8,12 @@ import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+/**
+ * Concrete strategy containing a plain style of the Mancala Board
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class PlainBoardStyle implements BoardFormatter {
 	   @Override
 	    public void setBoardStyle(MancalaBoard board) {
@@ -19,17 +25,25 @@ public class PlainBoardStyle implements BoardFormatter {
 
 	    }
 	   
-	   
+	   /**
+	    * Gets the color black for Mancala A
+	    */
 	    public Color getColorA()
 	    {
 	    	return Color.BLACK;
 	    }
 	    
+	    /**
+	     * Gets the color black for Mancala B
+	     */
 	    public Color getColorB()
 	    {
 	    	return Color.BLACK;
 	    }
 	    
+	    /**
+	     * Gets a reference of the shape for the Mancala Board
+	     */
 	    public RectangularShape getShape()
 	    {
 	    	return new Ellipse2D.Double(18, 0, 45, 45);
