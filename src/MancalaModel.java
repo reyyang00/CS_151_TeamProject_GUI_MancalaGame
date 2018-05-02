@@ -3,7 +3,6 @@
 
 
 import java.util.ArrayList;
-import javax.swing.*;
 import javax.swing.event.*;
 
 
@@ -13,25 +12,24 @@ import javax.swing.event.*;
 public class MancalaModel {
 
 
+    private int playerUndotime;
+
     ArrayList<PitComponent> data = new ArrayList<>();
-    ArrayList<PitComponent> preStatus = new ArrayList<>(12);
-    ArrayList<MancalaPit> preManStates = new ArrayList<>(2);
-
-    MancalaPlayer playerA, playerB;
-
+    ArrayList<PitComponent> previousState = new ArrayList<>(12);
 
     ArrayList[] status = new ArrayList[3];
-    MancalaPit manA;
-    MancalaPit manB;
+    MancalaPit manA = new MancalaPit();
+    MancalaPit previousManA = new MancalaPit();
+    MancalaPit manB = new MancalaPit();
+    MancalaPit previousManB = new MancalaPit();
+
     ArrayList listeners;
     int numberStones;
     int boardStyle;
-    int playerTurn = 2;            // stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB
-    private int move = 0;    // use for record the play status
+    int playerTurn = 2;            // stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB, 2=Game not initialized
     boolean initializationDone = false;
-    private int currentMoved =0;  //use for check if player is move, 0 not move, 1 move. if it is moved call undo function then current
-                                    //  play's undo time --
-                                    // really useful for undo fuction.
+    boolean playerGoesAgain = false;
+    boolean didUndo = false;
 
 
     public MancalaPit getManA() {
@@ -50,33 +48,26 @@ public class MancalaModel {
         this.manB = manB;
     }
 
-
-    public int getMove() {
-        return move;
+    public int getPlayerUndotime() {
+        return playerUndotime;
     }
 
-    public void setMove(int move) {
-        this.move = move;
+    public void setPlayerUndotime(int playerUndotime) {
+        this.playerUndotime = playerUndotime;
     }
+
+    public void increasePlayerUndotime() {
+        if (this.playerUndotime == 3) {
+            this.playerUndotime = 0;
+        } else
+            this.playerUndotime++;
+
+    }
+
 
     public void addHole(PitComponent pitComponent) {
         data.add(pitComponent);
-        preStatus.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
-    }
-
-    public void initializeStatus() {
-        status[0] = preStatus;
-
-    }
-
-    public void updateStatus(int move) {
-        for (int i = 0; i < preStatus.size(); i++) {
-            preStatus.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
-        }
-
-        preManStates.get(0).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
-        preManStates.get(1).mancala.setNumberOfStones(manB.mancala.getNumberOfStones());
-
+        previousState.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
     }
 
 
@@ -85,10 +76,8 @@ public class MancalaModel {
      */
     public MancalaModel() {
         listeners = new ArrayList();
-        initializeStatus();
+        playerUndotime = 0;
 
-        initializePlayerAB();
-//        initializeManAB();
     }
 
     /**
@@ -111,21 +100,44 @@ public class MancalaModel {
     }
 
 
+    public void updateStatus() {
+
+        for (int i = 0; i < previousState.size(); i++) {
+            previousState.get(i).hole.setNbStones(data.get(i).hole.getNbStones());
+        }
+
+        previousManA.mancala.numberOfStones = manA.mancala.numberOfStones;
+        previousManB.mancala.numberOfStones = manB.mancala.numberOfStones;
+
+
+    }
+
+
     /**
      * Change the data in the model at a particular location
      *
      * @param location the index of the field to change
      * @param value    the new value
      */
-    public void update(int location, int value) {
+    public void update(int location, int value)                // value is the number of stones to be distributed
+    {
+        updateStatus();
+
+
+        data.get(location).hole.setNbStones(0);
+
         if (location < 6)                // a pit of Player B was selected
         {
 
             int stop = location - value;
             for (int i = location - 1; i >= stop && i >= 0; i--) //
             {
-
-                data.get(i).hole.addStone();
+                if (value == 1) {
+                    data.get(i).hole.addStone();
+                    checkDropInEmpty(i);
+                } else {
+                    data.get(i).hole.addStone();
+                }
 
                 value--;
             }
@@ -135,7 +147,9 @@ public class MancalaModel {
                 value--;
 
                 if (value == 0) {
+                    playerGoesAgain = true;
                     playerTurn = changePlayerOrder(playerTurn);
+                    didUndo = false;
 
                 }
             }
@@ -151,16 +165,22 @@ public class MancalaModel {
                 }
             }
             playerTurn = changePlayerOrder(playerTurn);
+            didUndo = false;
 
 
         } else                    // a pit of Player A was selected
         {
-
-
             int counter = value;
             for (int i = location + 1; i <= location + value && i < 12; i++) {
 
-                data.get(i).hole.addStone();
+                if (counter == 1) {
+                    data.get(i).hole.addStone();
+                    checkDropInEmpty(i);
+                } else {
+                    data.get(i).hole.addStone();
+                }
+
+
                 counter--;
             }
             if (counter > 0) {
@@ -170,6 +190,10 @@ public class MancalaModel {
 
                 if (counter == 0) {
                     playerTurn = changePlayerOrder(playerTurn);
+                    playerGoesAgain = true;
+                    didUndo = false;
+
+
                 }
 
 
@@ -189,8 +213,23 @@ public class MancalaModel {
 
             }
             playerTurn = changePlayerOrder(playerTurn);
+            didUndo = false;
 
 
+        }
+
+
+        int endOfGame = checkEndOfGameCondition();
+
+        if (endOfGame > 0) {
+            playerTurn = 3;        // end of game. disable all buttons
+
+            if (endOfGame == 1)
+                System.out.println("PLAYER A WINS");
+            if (endOfGame == 2)
+                System.out.println("PLAYER B WINS");
+            if (endOfGame == 3)
+                System.out.println("Its a tie");
         }
 
 
@@ -201,17 +240,114 @@ public class MancalaModel {
 
         // 	   }
 
+
+    }
+
+
+    /**
+     * checks whether end of game condition is met
+     */
+    private int checkEndOfGameCondition() {
+
+
+        boolean allZero = true;
+        for (int i = 0; i < 6 && allZero == true; i++) {
+            if (data.get(i).hole.getNbStones() > 0) {
+                allZero = false;
+            }
+        }
+
+        if (allZero) {                //Player B's side is all zero
+            System.out.println("CLEAN UP SIDE OF 6");
+            cleanUpSide(6);
+
+        }
+
+        allZero = true;
+        for (int i = 6; i < 12 && allZero == true; i++) {
+            if (data.get(i).hole.getNbStones() > 0) {
+                allZero = false;
+            }
+        }
+
+        if (allZero) {                //Player A's side is all zero
+
+            System.out.println("CLEAN UP SIDE OF 0");
+
+            cleanUpSide(0);
+        }
+
+
+        int stonesNeededForWin = numberStones * 6;
+
+        if (manA.mancala.numberOfStones > stonesNeededForWin)
+            return 1;            // Player A wins
+
+        if (manB.mancala.numberOfStones > stonesNeededForWin)
+            return 2;            // Player B wins
+
+
+        if (manA.mancala.numberOfStones == stonesNeededForWin && manB.mancala.numberOfStones == stonesNeededForWin) {
+            return 3;
+        }
+
+
+        return 0;
+
+    }
+
+
+    /**
+     * one side of pits is all empty, clean up the other side
+     */
+    private void cleanUpSide(int startPit) {
+        int counter = 0;
+        for (int i = startPit; i < startPit + 6; i++) {
+            counter += data.get(i).hole.getNbStones();        // count total of stones
+
+            data.get(i).hole.setNbStones(0);                    // empty the pit
+        }
+
+        if (startPit == 0)                                // add cleaned up stones to mancala
+        {
+            manB.mancala.numberOfStones += counter;
+        } else {
+            manA.mancala.numberOfStones += counter;
+        }
+
+
     }
 
 
     /**
      * checks whether the last stone was dropped in an empty pit of own side
      */
-    private int checkDropInEmpty(int current) {
-        if (current == 1)
-            return 0;
-        else
-            return 1;
+    private void checkDropInEmpty(int current) {
+        if (data.get(current).hole.getNbStones() == 1)            // was empty before, now has 1 --> we steal own an opposite pit
+        {
+            int counter = 1;
+
+            data.get(current).hole.setNbStones(0);
+
+            if (current > 5)            // empty pit was an player A's side
+            {
+                counter += data.get(current - 6).hole.getNbStones();
+                manA.mancala.numberOfStones += counter;
+                data.get(current - 6).hole.setNbStones(0);
+
+
+            }
+            if (current < 6)            // empty pit was an player B's side
+            {
+                counter += data.get(current + 6).hole.getNbStones();
+                manB.mancala.numberOfStones += counter;
+                data.get(current + 6).hole.setNbStones(0);
+
+            }
+
+
+        }
+
 
     }
 
@@ -231,40 +367,28 @@ public class MancalaModel {
     /**
      * XXXX
      */
-    public void undoFuntion() {
-        System.out.println("Curent move:"+currentMoved);
-        if(playerA.getTotalUndoLeft()>0||playerB.getTotalUndoLeft()>0) {
-            if (currentMoved==1) {
-                if (move < 1) {
-                    initializeStones();
-                    manA.mancala.setNumberOfStones(0);
-                    manB.mancala.setNumberOfStones(0);
-
-
-                } else {
-
-                    for (int i = 0; i < 12; i++) {
-                        data.get(i).hole.setNbStones(preStatus.get(i).hole.getNbStones());
-                    }
-
-                    manA.mancala.setNumberOfStones(preManStates.get(0).mancala.getNumberOfStones());
-                    manB.mancala.setNumberOfStones(preManStates.get(1).mancala.getNumberOfStones());
-
-
+    public void undoFuntion(int playerMove) {
+        if (playerTurn == 1 || playerTurn == 0) {
+            if (didUndo == false) {
+                for (int i = 0; i < previousState.size(); i++) {
+                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
                 }
-                if (playerTurn == 0) {// playA is moving
-                    playerA.decreaseUndotime();
-                } else {
-                    playerB.decreaseUndotime();
+
+                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
+
+                if (playerGoesAgain == false) {
+                    playerTurn = changePlayerOrder(playerTurn);
                 }
+
+                playerGoesAgain = false;
+
+                ChangeListener l = (ChangeListener) listeners.get(0);
+                l.stateChanged(new ChangeEvent(this));
             }
+
+            didUndo = true;
         }
-        setCurrentMoved(0);
-        System.out.println("playerA undotime left:"+playerA.getTotalUndoLeft());
-        System.out.println("playerB undotime left:"+playerB.getTotalUndoLeft());
-        System.out.println("Curent move:"+currentMoved);
-        ChangeListener l = (ChangeListener) listeners.get(0);
-        l.stateChanged(new ChangeEvent(this));
 
     }
 
@@ -289,29 +413,19 @@ public class MancalaModel {
         // do something
     }
 
-    public void initializeManAB() {
-        for (int i = 0; i < 2; i++) {
-            preManStates.add(new MancalaPit());
-        }
-        preManStates.get(0).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
-        preManStates.get(1).mancala.setNumberOfStones(manA.mancala.getNumberOfStones());
 
-    }
-
-    public void initializePlayerAB() {
-        playerA = new MancalaPlayer(3);
-        playerB = new MancalaPlayer(3);
-    }
-
-    public int getCurrentMoved() {
-        return currentMoved;
-    }
-
-    public void setCurrentMoved(int currentMoved) {
-        this.currentMoved = currentMoved;
-    }
 }
 
 
 
 
+
+
+
+
+
+
+
+
+   
+   

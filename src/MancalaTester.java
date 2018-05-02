@@ -4,8 +4,8 @@ import java.util.ArrayList;
 // MancalaTester.java
 
 /**
- A class for testing the Mancala Game.
- */
+A class for testing the Mancala Game.
+*/
 public class MancalaTester
 {
     /**
@@ -15,22 +15,17 @@ public class MancalaTester
     public static void main(String[] args)
     {
 
-//        MancalaModel model = new MancalaModel();
+        MancalaModel model = new MancalaModel();
 
 
-        MancalaBoard gameboard = new MancalaBoard();
-        MancalaBoradContext context = new MancalaBoradContext(new SJSUBoradStyle());
+        MancalaBoard gameboard = new MancalaBoard(model);
+        MancalaBoradContext context = new MancalaBoradContext(new PlainBoardStyle());
         context.excuteSettingBoradStyle(gameboard);
 
 
-      //  System.out.println("hi");
 
-        gameboard.getDataModel().attach(gameboard);
+        model.attach(gameboard);
         gameboard.setSelfPointer(gameboard);
-
-
-//	    gameboard.stoneButtons();
-//	    gameboard.styleButtons();
 
 
     }

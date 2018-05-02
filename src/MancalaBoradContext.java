@@ -1,3 +1,7 @@
+// CS 151 - Project Group SSR
+// MancalaBoardContext.java
+
+
 public class MancalaBoradContext {
     private BoardFormatter strategy;
 
