@@ -1,19 +1,19 @@
 public class MancalaPlayer {
-    private int undoTime;
+    private int undoTimeLeft;
 
-    public MancalaPlayer(int undoTime) {
-        this.undoTime = undoTime;
+    public MancalaPlayer() {
+        this.undoTimeLeft = 3;
     }
 
-    public int getUndoTime() {
-        return undoTime;
+    public void decreaseUndoTimeLeft(){
+        this.undoTimeLeft--;
     }
 
-    public void setUndoTime(int undoTime) {
-        this.undoTime = undoTime;
+    public int getUndoTimeLeft() {
+        return undoTimeLeft;
     }
 
-    public void increaseUndoTime(){
-        this.undoTime++;
+    public void setUndoTimeLeft(int undoTimeLeft) {
+        this.undoTimeLeft = undoTimeLeft;
     }
 }
