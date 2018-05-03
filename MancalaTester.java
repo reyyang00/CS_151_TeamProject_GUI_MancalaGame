@@ -4,8 +4,8 @@ import java.util.ArrayList;
 // MancalaTester.java
 
 /**
- A class for testing the Mancala Game.
- */
+A class for testing the Mancala Game.
+*/
 public class MancalaTester
 {
     /**
@@ -19,18 +19,13 @@ public class MancalaTester
 
 
         MancalaBoard gameboard = new MancalaBoard(model);
-        MancalaBoradContext context = new MancalaBoradContext(new SJSUBoradStyle());
+        MancalaBoradContext context = new MancalaBoradContext(new PlainBoardStyle());
         context.excuteSettingBoradStyle(gameboard);
 
 
-      //  System.out.println("hi");
 
         model.attach(gameboard);
         gameboard.setSelfPointer(gameboard);
-
-
-//	    gameboard.stoneButtons();
-//	    gameboard.styleButtons();
 
 
     }
