@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 /**
 A class for testing the Mancala Game.
+* @author Rui Yang, Sandro Sallenbach, and Stefan Do
+* @version CS151 Dr. Kim
+*
 */
 public class MancalaTester
 {

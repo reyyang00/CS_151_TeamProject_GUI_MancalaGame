@@ -1,14 +1,16 @@
+// CS 151 - Project Group SSR
+// PitComponent.java
+
 import java.awt.*;
-//import java.awt.Point;
-//import java.awt.event.MouseAdapter;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.JComponent;
 
 
-//PitComponent holds the stones.
-
+/** The PitComponent holds the StoneHole objects and delegates drawing to those objects.
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class PitComponent extends JComponent
 {
     int id;
@@ -18,6 +20,12 @@ public class PitComponent extends JComponent
     final int STATUSCOUNTER = 1;
     int mo;
 
+    
+    /**
+     * Constructor that references the Model MancalaModel
+     * @param data, a reference to the MancalaModel
+     * @param id, the index number of the pit
+     */
     public PitComponent(MancalaModel data, int id) {
         this.id = id;
         dataModel = data;
@@ -26,6 +34,12 @@ public class PitComponent extends JComponent
         addMouseListener(listeners);
     }
 
+    
+    /**
+     * MouseListener class with a method that updates the Mancala for each player.
+     * Includes a mousePressed method, that activates when the mouse is pressed within one of the pit components.
+     *
+     */
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
         	
@@ -43,17 +57,11 @@ public class PitComponent extends JComponent
      		   {
             	
             		// update the move
-            		System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
-            		System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
+ //           		System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
+ //         		System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
 	
 	
-		            // System.out.println("The total move is:"+dataModel.getMove());
-//		            dataModel.updateStatus();
-		            //  System.out.println(dataModel.getMove());
-		
-		            //this is update the data
             		int stonesToDistribute = hole.getNbStones();
-//		            hole.setNbStones(0);
 
 		            dataModel.update(id, stonesToDistribute);
 		
@@ -64,12 +72,10 @@ public class PitComponent extends JComponent
 
 
     }
-//    public void copy(){
-//
-//        dataModel.getData().get()
-//    }
 
-
+    /**
+     * Delegates drawing to the StoneHole objects
+     */
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         hole.draw(g2);

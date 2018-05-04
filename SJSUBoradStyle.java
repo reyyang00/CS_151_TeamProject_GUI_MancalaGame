@@ -1,3 +1,7 @@
+// CS 151 - Project Group SSR
+// SJSUBoardStyle.java
+
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -7,6 +11,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+
+/**
+ * Concrete strategy containing a more advanced style for the Mancala board
+ * Implements the BoardFormatter interface.
+ *
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class SJSUBoradStyle implements BoardFormatter {
     @Override
     public void setBoardStyle(MancalaBoard board) {
@@ -14,23 +26,6 @@ public class SJSUBoradStyle implements BoardFormatter {
         board.getMancaA().setBackground(Color.YELLOW);
         board.getMancaB().setBackground(Color.BLUE);
         
-        
-
-        
- //       board.playerFont = new Font("Helvetica", Font.BOLD, 20);
-        
- //       Font playerFont = new Font("Bahnschrift", Font.PLAIN, 20);
-
-
-//        BufferedImage myPicture = null;
-//        try {
-//            myPicture = ImageIO.read(new File("src/resource/sjsu.gif"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-//        board.getSouthPanel().add(picLabel);
-
     }
     
     public Color getColorA()

@@ -1,13 +1,19 @@
+// CS 151 - Project Group SSR
+// StoneHole.java
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RectangularShape;
-
 import javax.swing.Icon;
 
 
+/** 
+ * This class holds the number of stones and is also responsible for (re-)drawing the pit
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 public class StoneHole
 {
 
@@ -15,9 +21,14 @@ public class StoneHole
 	private Color colorA;
 	private Color colorB;
 	private RectangularShape shape = new Ellipse2D.Double(18, 0, 45, 45);
+		
 	
-//	private Color = Color.Red;
-	
+	/**
+	 * Sets the design of the stones for each stone pit
+	 * @param a main color for pit
+	 * @param b secondary color for pit
+	 * @param s Shape of the pit
+	 */
 	public void setSyle(Color a, Color b, RectangularShape s)
 	{
 		colorA = a;
@@ -25,12 +36,18 @@ public class StoneHole
 		shape = s;
 	}
 	
-	
+	/**
+	 * Initializing the number of stones to 0
+	 */
 	 public StoneHole()
 	 {
 		 numberOfStones = 0;																									/// CHANGE LATER
 	 }
 	 
+	 
+	/**
+	 * This method draws the pit as well as the containing stones
+	 */
 	 public void draw(Graphics2D g2)
 	 {
          g2.setStroke(new BasicStroke(2));
@@ -78,31 +95,48 @@ public class StoneHole
 
 	 }
 	 
+	 
+	/**
+	 * Getter for the number of stones
+	 * @return Number of stones
+	 */
 	 public int getNbStones()
 	 {
 	
 		 return numberOfStones;
 	 }
 	 
-	 
+	/**
+	 * Setter for the number of stones
+	 * @param nbStones Number of stones
+	 */	 
 	 public void setNbStones(int nbStones)
 	 {
 		 numberOfStones = nbStones;
 	 }
 	 
-	 
+	/**
+	 * Increments the number of stones by one.
+	 */	 
 	 public void addStone()
 	 {
 		 numberOfStones++;
 	 }
 	 
 
+	/**
+	 * Draws 1 stone
+	 */
 	 private void draw1(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
 			 g2.draw(point1);
 			 g2.fill(point1);
 	 }
+	 
+	/**
+	 * Draws 2 stones
+	 */	 
 	 private void draw2(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -115,6 +149,10 @@ public class StoneHole
 			 g2.fill(point2);
 
 	 }
+	 
+	/**
+	 * Draws 3 stones
+	 */	
 	 private void draw3(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -129,6 +167,11 @@ public class StoneHole
 			 g2.fill(point3);
 
 	 }
+
+	 
+	/**
+	 * Draws 4 stones
+	 */	
 	 private void draw4(Graphics2D g2)
 	 {
 		Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -146,6 +189,9 @@ public class StoneHole
 		 g2.fill(point4);
 	 }
 	 
+	/**
+	 * Draws 5 stones
+	 */	 
 	 private void draw5(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -165,6 +211,11 @@ public class StoneHole
 			 g2.draw(point5);
 			 g2.fill(point5);
 	 }
+
+	 
+	/**
+	 * Draws 6 stones
+	 */		 
 	 private void draw6(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(25, 10, 4, 4);
@@ -188,6 +239,10 @@ public class StoneHole
 			 g2.fill(point6);
 	 }
 
+	 
+	/**
+	 * Draws more than 6 stones
+	 */	
 	 private void drawMore(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(25, 10, 4, 4);
@@ -214,8 +269,5 @@ public class StoneHole
 
 	 }
 
-	 
-	 
-	 
 
 }

@@ -10,6 +10,15 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
+
+/**
+ * This is a Jframe window which can be seen and it contains multiple JPanels on it,
+ *
+ * @author Rui Yang, Sandro sallenbach, Stefan Do
+ * @version since 5/1/2018 CS151 Dr.kim
+ */
+
+
 /**
  * A class that implements the [V]iew and [C]ontroller part of the MVC pattern.
  */
@@ -33,36 +42,61 @@ public class MancalaBoard extends JFrame implements ChangeListener
     private static final int PANEL_HEIGHT = 100;
     final int FIELD_WIDTH = 20;
     private JTextField outputField = new JTextField();
-//    private JTextField outputField2 = new JTextField();
 
     private JPanel southPanel = new JPanel(new BorderLayout());
 
+    
+    /**
+     * a getter method for mancaB
+     * @return  a JPanel type
+     */
     public JPanel getMancaB() {
         return mancaB;
     }
 
+    /**
+     * a setter method for mancaB
+     * @param mancaB  pass a JPanel type and sets it to mancaB
+     */
     public void setMancaB(JPanel mancaB) {
         this.mancaB = mancaB;
     }
 
+    /**
+     * a getter method for southPanel
+     * @return  a JPanel type
+     */
     public JPanel getSouthPanel() {
         return southPanel;
     }
 
+    /**
+     * a setter method for southPanel
+     * @param southPanel pass a JPanel type and sets it to southPanel
+     */
     public void setSouthPanel(JPanel southPanel) {
         this.southPanel = southPanel;
     }
 
+    /**
+     * a getter method for mancaA
+     * @return  a JPanel type
+     */
     public JPanel getMancaA() {
         return mancaA;
     }
 
+    /**
+     * a setter method for mancaA
+     * @param mancaA  pass a JPanel type and sets it to mancaB
+     */
     public void setMancaA(JPanel mancaA) {
         this.mancaA = mancaA;
     }
 
+    
     /**
-     * a reference uses to point to board itself, so that can be closed easier.
+     * a reference used to point to board itself, so that can be closed easier.
      *
      * @param selfPointer the data that is displayed on the MancalaBoard
      */
@@ -71,11 +105,11 @@ public class MancalaBoard extends JFrame implements ChangeListener
     }
 
 
-        /**
-         Constructs a MancalaBoard object
-         Functions as View and Controller at the same time
-         @param data the data that is displayed on the MancalaBoard
-         */
+     /**
+     *  Constructs a MancalaBoard object
+     *  Functions as View and Controller at the same time
+     *  @param data the data that is displayed on the MancalaBoard
+     */
     public MancalaBoard(MancalaModel data)
         {
 
@@ -83,10 +117,6 @@ public class MancalaBoard extends JFrame implements ChangeListener
             this.status = new ArrayList<PitComponent>(12);
             this.setLayout(new BorderLayout());
             this.setResizable(false);
-
-
-
-
 
             outputField.setText("How many stones per field?");
             outputField.setHorizontalAlignment(JTextField.CENTER);
@@ -213,26 +243,43 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
 
         /**
-         Called when the data in the model is changed.
-         @param e the event representing the change
-         */
+        * Called when the data in the model is changed.
+        * @param e the event representing the change
+        */
         public void stateChanged (ChangeEvent arg0)
         {
 
-            for (int i = 0; i < 12; i++) {
-                System.out.println(dataModel.data.get(i).hole.getNbStones());											//// ONLY FOR TESTING, REMOVE AFTER
-
+            for (int i = 0; i < 12; i++)
+            {
                 dataModel.data.get(i).repaint();
-
-
             }
 
             dataModel.manA.repaint();
             dataModel.manB.repaint();
+            
+            
+            if(dataModel.endOfGame > 0)
+            {
+            	outputField.setBackground(Color.GREEN);	
+                if (dataModel.endOfGame == 1)
+                    outputField.setText("PLAYER A WINS");
+                if (dataModel.endOfGame == 2)
+                    outputField.setText("PLAYER B WINS");
+                if (dataModel.endOfGame == 3)
+                    outputField.setText("It's a tie");
+                
+            }
+            
+            
 
         }
 
         
+        /**
+         * a helper method to help us to use strategy pattern base on the way we design our game
+         *
+         * @param updatedStyle a BoardFormatter type use to the reference of the strategy
+         */
         public void style(BoardFormatter updatedStyle)
         {
         	newContext = new MancalaBoradContext(updatedStyle);
@@ -250,6 +297,8 @@ public class MancalaBoard extends JFrame implements ChangeListener
         
 
         /**
+         * activate all the buttons on the window.
+         * also includes an anonymous actionListener.
          */
         public void activateButtons ()
         {
@@ -330,8 +379,7 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
 
                     } else {
-                        dataModel.undoFuntion(dataModel.getPlayerUndotime());
-                        dataModel.increasePlayerUndotime();
+                        dataModel.undoFuntion();
                         System.out.println("undo clicked");
                         newStringB = "Undo";
                         newStringA = "End Game";
@@ -353,10 +401,6 @@ public class MancalaBoard extends JFrame implements ChangeListener
 
             southPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-
-        }
-
-        public void updateStatus (ArrayList < PitComponent > list) {
 
         }
 
