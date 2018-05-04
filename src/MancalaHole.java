@@ -1,19 +1,30 @@
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-
-import javax.swing.Icon;
+/**
+ * a class contains stones
+ *
+ * @author Rui Yang, Sandro sallenbach, Stefan Do
+ * @version since 5/1/2018 CS151 Dr.kim
+ */
 
 public class MancalaHole
 {
-	int numberOfStones;
-	private int offset = 30;
+	int numberOfStones; //stones inside each holder
+	private int offset = 30;// a variable use to tell who wins the game
 	
 	 public MancalaHole()
 	 {
 		 numberOfStones = 0;
 	 }
-	 
-	 public void draw(Graphics2D g2)
+
+
+	/**
+	 * a draw method to the stone itself
+	 * @param g2 a type Graphics2D
+	 */
+
+
+	public void draw(Graphics2D g2)
 	 {
          g2.setStroke(new BasicStroke(4));
 
@@ -39,8 +50,12 @@ public class MancalaHole
 		 }
 
 	 }
-	 
-	 
+
+
+	/**
+	 * a method to add stones
+	 */
+
 	 public void addStone()
 	 {
 		 numberOfStones++;

@@ -6,7 +6,10 @@ import java.awt.geom.RectangularShape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
+/**Concrete strategy containing a SJSU-themed style for the Mancala board
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ *
+ */
 public class SJSUBoradStyle implements BoardFormatter {
     @Override
     public void setBoardStyle(MancalaBoard board) {
@@ -32,16 +35,27 @@ public class SJSUBoradStyle implements BoardFormatter {
 //        board.getSouthPanel().add(picLabel);
 
     }
-    
+
+
+    /**
+     * Gets the color blue to style the MancalaBoard
+     */
     public Color getColorA()
     {
     	return Color.BLUE;
     }
-    
+
+    /**
+     * Gets the color blue to style the MancalaBoard
+     */
     public Color getColorB()
     {
     	return Color.GRAY;
     }
+
+    /**
+     * Gets a reference of the shape for the style of the MancalaBoard
+     */
     
     public RectangularShape getShape()
     {

@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 
 
-//PitComponent holds the stones.
+/** The PitComponent holds the stones.
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ */
 
 public class PitComponent extends JComponent
 {
@@ -18,6 +21,10 @@ public class PitComponent extends JComponent
     final int STATUSCOUNTER = 1;
     int mo;
 
+
+    /**
+     * Constructor that references the Model MancalaModel
+     */
     public PitComponent(MancalaModel data, int id) {
         this.id = id;
         dataModel = data;
@@ -25,6 +32,11 @@ public class PitComponent extends JComponent
         MouseListeners listeners = new MouseListeners();
         addMouseListener(listeners);
     }
+
+    /**
+     * MouseListener class with a method that updates the Mancala for each player
+     *
+     */
 
     private class MouseListeners extends MouseAdapter {
         public void mousePressed(MouseEvent event) {
@@ -41,24 +53,17 @@ public class PitComponent extends JComponent
             	
      		   if((dataModel.playerTurn == 1 && id < 6) || (dataModel.playerTurn == 0 && id > 5))
      		   {
-            	
-            		// update the move
-                   //System.out.println(S);
-            		System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
-            		System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
-	
-	
-		            // System.out.println("The total move is:"+dataModel.getMove());
-//		            dataModel.updateStatus();
-		            //  System.out.println(dataModel.getMove());
-		
-		            //this is update the data
-            		int stonesToDistribute = hole.getNbStones();
-//		            hole.setNbStones(0);
 
-		            dataModel.update(id, stonesToDistribute);
-		
-		            repaint();
+                   // update the move
+                   System.out.println("Mancala A:" + dataModel.getManA().mancala.numberOfStones);						// JUST FOR TESTING
+                   System.out.println("Mancala B:" + dataModel.getManB().mancala.numberOfStones);						// JUST FOR TESTING
+
+
+                   int stonesToDistribute = hole.getNbStones();
+
+                   dataModel.update(id, stonesToDistribute, true);
+
+                   repaint();
      		   }
             }
         }
@@ -70,6 +75,10 @@ public class PitComponent extends JComponent
 //        dataModel.getData().get()
 //    }
 
+
+    /**
+     * Draws the Mancala pits for each player
+     */
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;

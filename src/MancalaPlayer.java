@@ -1,19 +1,46 @@
+/**
+ * This class represent player in the a mancala game
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim
+ *
+ */
+
 public class MancalaPlayer {
-    private int undoTime;
+    private int undoTimeLeft;
 
-    public MancalaPlayer(int undoTime) {
-        this.undoTime = undoTime;
+    /**
+     * A constructor that initialize 3 undo time when the object is created
+     *
+     */
+
+    public MancalaPlayer() {
+        this.undoTimeLeft = 3;
     }
 
-    public int getUndoTime() {
-        return undoTime;
+    /**
+     * A method to decrease the undo time
+     *
+     */
+
+    public void decreaseUndoTimeLeft(){
+        this.undoTimeLeft--;
     }
 
-    public void setUndoTime(int undoTime) {
-        this.undoTime = undoTime;
+    /**
+     * a getter for the undo time
+     *
+     */
+
+    public int getUndoTimeLeft() {
+        return undoTimeLeft;
     }
 
-    public void increaseUndoTime(){
-        this.undoTime++;
+
+    /**
+     * A setter for the undo time
+     *
+     */
+    public void setUndoTimeLeft(int undoTimeLeft) {
+        this.undoTimeLeft = undoTimeLeft;
     }
 }

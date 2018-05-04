@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import javax.swing.event.*;
 
 
-/**
- * The ManacalaModel represents the [M]odel of the MVC pattern.
+/**	The ManacalaModel represents the [M]odel of the MVC pattern.
+ *
+ * @author	Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version	CS151 Dr. Kim
  */
 public class MancalaModel {
 
 
     private int playerUndotime;
+    private MancalaPlayer playerA, playerB;
 
     ArrayList<PitComponent> data = new ArrayList<>();
     ArrayList<PitComponent> previousState = new ArrayList<>(12);
@@ -28,34 +31,74 @@ public class MancalaModel {
     int boardStyle;
     int playerTurn = 2;            // stores which players turn it is. While it's player A's turn, the pits of player B are deactivated. 0=PlayerA, 1=PlayerB, 2=Game not initialized
     boolean initializationDone = false;
-    boolean playerGoesAgain = false;
+    boolean lastInOwnMancala = false;
     boolean didUndo = false;
+    boolean changePlayerFlag = false;
+    int endOfGame = 0;
+//    String outputString = "buba";
 
+
+
+
+    /**
+     * a getter method for manA
+     * @return  a MancalaPt type
+     */
 
     public MancalaPit getManA() {
         return manA;
     }
 
+    /**
+     * a setter method for manA
+     * @param manA   pass a MancalaPt type and sets it to manA
+     */
     public void setManA(MancalaPit manA) {
         this.manA = manA;
     }
+
+
+    /**
+     * a getter method for manB
+     * @return  a MancalaPt type
+     */
 
     public MancalaPit getManB() {
         return manB;
     }
 
+    /**
+     * a setter method for manA
+     * @param manB   pass a MancalaPt type and sets it to manB
+     */
     public void setManB(MancalaPit manB) {
         this.manB = manB;
     }
+
+
+    /**
+     * a getter method to get the player's undo time
+     * @return   a int type
+     */
 
     public int getPlayerUndotime() {
         return playerUndotime;
     }
 
+    /**
+     * a setter method for manA
+     * @param playerUndotime   pass int type and sets it to its relative player's undo time
+     */
+
     public void setPlayerUndotime(int playerUndotime) {
         this.playerUndotime = playerUndotime;
     }
 
+
+    /**
+     * a  method to increase the player's undo time
+     *
+     */
     public void increasePlayerUndotime() {
         if (this.playerUndotime == 3) {
             this.playerUndotime = 0;
@@ -65,6 +108,11 @@ public class MancalaModel {
     }
 
 
+    /**
+     * a method initialize the stones for each pit and
+     * the stats which use for the undo function
+     * @param pitComponent
+     */
     public void addHole(PitComponent pitComponent) {
         data.add(pitComponent);
         previousState.add(new PitComponent(pitComponent.dataModel, pitComponent.id));
@@ -77,6 +125,7 @@ public class MancalaModel {
     public MancalaModel() {
         listeners = new ArrayList();
         playerUndotime = 0;
+        initializePlayerAB();
 
     }
 
@@ -100,6 +149,11 @@ public class MancalaModel {
     }
 
 
+
+    /**
+     * a method hat save the stats for the game before each move
+     *
+     */
     public void updateStatus() {
 
         for (int i = 0; i < previousState.size(); i++) {
@@ -114,112 +168,170 @@ public class MancalaModel {
 
 
     /**
+     * a method used to help distributes the number of stones in Player B
+     *
+     * @param location,value,flag,
+     */
+    private int distributeStonesB(int location, int value, boolean flag)
+    {
+        int stop = location - value;
+
+        for (int i = location - 1; i >= stop && i >= 0; i--) //
+        {
+            if (value == 1 && flag)
+            {
+                data.get(i).hole.addStone();
+                checkDropInEmpty(i);
+            }
+            else
+            {
+                data.get(i).hole.addStone();
+            }
+
+            value--;
+        }
+
+        if (value > 0 && flag)                            ////&& playerTurn == 1   we dont fill the oponents mancala!
+        {
+            manB.mancala.addStone();
+            value--;
+
+            if (value == 0)
+            {
+                lastInOwnMancala = true;
+                changePlayerFlag = false;	// we go again
+
+            }
+        }
+
+        return value;
+    }
+
+
+
+    /**
+     * a method used to help distributes the number of stones in Player A
+     *
+     * @param location,value,flag,
+     */
+    private int distributeStonesA(int location, int value, boolean flag)
+    {
+
+        int c = value;
+        for (int i = location; i < location + c && i < 12; i++)
+        {
+
+            if (value == 1 && flag)
+            {
+                data.get(i).hole.addStone();
+                checkDropInEmpty(i);
+            } else {
+                data.get(i).hole.addStone();
+            }
+
+            value--;
+        }
+
+
+        if (value > 0 && flag)
+        {
+
+            manA.mancala.addStone();
+            value--;
+
+            if (value == 0)
+            {
+                changePlayerFlag = false;	// we go again
+                lastInOwnMancala = true;
+            }
+
+
+        }
+
+        return value;
+
+    }
+
+
+
+    /**
      * Change the data in the model at a particular location
      *
      * @param location the index of the field to change
      * @param value    the new value
      */
-    public void update(int location, int value)                // value is the number of stones to be distributed
+    public void update(int location, int value, boolean flag)                // value is the number of stones to be distributed
     {
-        updateStatus();
+        if(flag)
+            updateStatus();
 
+        didUndo = false;
+        changePlayerFlag = true;		// we are planning on changing to opponent
+        lastInOwnMancala = false;
 
         data.get(location).hole.setNbStones(0);
 
         if (location < 6)                // a pit of Player B was selected
         {
+            playerA.setUndoTimeLeft(3);
 
-            int stop = location - value;
-            for (int i = location - 1; i >= stop && i >= 0; i--) //
+            value = distributeStonesB(location, value, true);
+
+
+            while(value > 0)
             {
-                if (value == 1) {
-                    data.get(i).hole.addStone();
-                    checkDropInEmpty(i);
-                } else {
-                    data.get(i).hole.addStone();
-                }
-
-                value--;
-            }
-            if (value > 0)                            ////&& playerTurn == 1   we dont fill the oponents mancala!
-            {
-                manB.mancala.addStone();
-                value--;
-
-                if (value == 0) {
-                    playerGoesAgain = true;
-                    playerTurn = changePlayerOrder(playerTurn);
-                    didUndo = false;
+                if (value > 0)
+                {
+                    value = distributeStonesA(6, value, false);
 
                 }
-            }
-            if (value > 0) {
-                if (value < 7) {
-                    for (int i = 6; i < 6 + value; i++) {
 
-                        data.get(i).hole.addStone();
-                    }
-                } else {
-                    data.get(6).hole.addStone();                    // if there is so many stones, it will overflow the bottom row and go around
-                    update(6, value - 1);
+                if (value > 0)
+                {
+                    value = distributeStonesB(6, value, true);
+
                 }
+
             }
-            playerTurn = changePlayerOrder(playerTurn);
-            didUndo = false;
 
-
-        } else                    // a pit of Player A was selected
+        }
+        //=============================================================================================================================================
+        //=============================================================================================================================================
+        else                 		   // a pit of Player A was selected
         {
-            int counter = value;
-            for (int i = location + 1; i <= location + value && i < 12; i++) {
 
-                if (counter == 1) {
-                    data.get(i).hole.addStone();
-                    checkDropInEmpty(i);
-                } else {
-                    data.get(i).hole.addStone();
-                }
+            playerB.setUndoTimeLeft(3);
 
+            value = distributeStonesA(location+1, value, true);
 
-                counter--;
-            }
-            if (counter > 0) {
-
-                manA.mancala.addStone();
-                counter--;
-
-                if (counter == 0) {
-                    playerTurn = changePlayerOrder(playerTurn);
-                    playerGoesAgain = true;
-                    didUndo = false;
-
+            while(value > 0)
+            {
+                if (value > 0)
+                {
+                    value = distributeStonesB(6, value, false);
 
                 }
 
+                if (value > 0)
+                {
+                    value = distributeStonesA(6, value, true);
 
-            }
-            if (counter > 0) {
-                if (counter < 7) {
-                    for (int i = 5; i > 5 - counter && i >= 0; i--) //
-                    {
-
-                        data.get(i).hole.addStone();
-                    }
-                } else {
-                    data.get(5).hole.addStone();                    // if there is so many stones, it will overflow the bottom row and go around
-                    update(5, counter - 1);
                 }
 
-
             }
-            playerTurn = changePlayerOrder(playerTurn);
-            didUndo = false;
 
 
         }
 
+        //=============================================================================================================================================
+        //=============================================================================================================================================
 
-        int endOfGame = checkEndOfGameCondition();
+
+
+        if(changePlayerFlag)
+            playerTurn = changePlayerOrder(playerTurn);
+
+        endOfGame = checkEndOfGameCondition();
 
         if (endOfGame > 0) {
             playerTurn = 3;        // end of game. disable all buttons
@@ -287,7 +399,8 @@ public class MancalaModel {
             return 2;            // Player B wins
 
 
-        if (manA.mancala.numberOfStones == stonesNeededForWin && manB.mancala.numberOfStones == stonesNeededForWin) {
+        if (manA.mancala.numberOfStones == stonesNeededForWin && manB.mancala.numberOfStones == stonesNeededForWin)
+        {
             return 3;
         }
 
@@ -355,7 +468,8 @@ public class MancalaModel {
     /**
      * changes from player A to player B and vice versa. used in the update-method
      */
-    private int changePlayerOrder(int current) {
+    private int changePlayerOrder(int current)
+    {
         if (current == 1)
             return 0;
         else
@@ -365,36 +479,92 @@ public class MancalaModel {
 
 
     /**
-     * XXXX
+     *  a method that provides user undo the game
      */
-    public void undoFuntion(int playerMove) {
-        if (playerTurn == 1 || playerTurn == 0) {
-            if (didUndo == false) {
-                for (int i = 0; i < previousState.size(); i++) {
-                    data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
-                }
+    public void undoFuntion()
+    {
+        if(endOfGame == 0)
+        {
+            if(lastInOwnMancala == true)
+            {
+                playerTurn = changePlayerOrder(playerTurn);
 
-                manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
-                manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
-
-                if (playerGoesAgain == false) {
-                    playerTurn = changePlayerOrder(playerTurn);
-                }
-
-                playerGoesAgain = false;
-
-                ChangeListener l = (ChangeListener) listeners.get(0);
-                l.stateChanged(new ChangeEvent(this));
             }
 
-            didUndo = true;
-        }
+            if (playerTurn == 0 && playerB.getUndoTimeLeft() > 0 )		// Player B presses undo
+            {
+                if (didUndo == false)
+                {
+                    for (int i = 0; i < previousState.size(); i++)
+                    {
+                        data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
+                    }
 
+                    manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+                    manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
+
+                    //            if (lastInOwnMancala == false)
+                    //            {
+                    playerTurn = changePlayerOrder(playerTurn);
+                    //            }
+
+                    //              playerGoesAgain = false;
+
+                    ChangeListener l = (ChangeListener) listeners.get(0);
+                    l.stateChanged(new ChangeEvent(this));
+
+                    playerB.decreaseUndoTimeLeft();
+
+                }
+
+                didUndo = true;
+
+
+            }
+            else if (playerTurn == 1 && playerA.getUndoTimeLeft() > 0)
+            {
+                if (didUndo == false)
+                {
+                    for (int i = 0; i < previousState.size(); i++)
+                    {
+                        data.get(i).hole.setNbStones(previousState.get(i).hole.getNbStones());
+                    }
+
+                    manA.mancala.numberOfStones = previousManA.mancala.numberOfStones;
+                    manB.mancala.numberOfStones = previousManB.mancala.numberOfStones;
+
+                    //            if (lastInOwnMancala == false)
+                    //            {
+                    playerTurn = changePlayerOrder(playerTurn);
+                    //           }
+
+                    //       playerGoesAgain = false;
+
+                    ChangeListener l = (ChangeListener) listeners.get(0);
+                    l.stateChanged(new ChangeEvent(this));
+
+                    playerA.decreaseUndoTimeLeft();
+
+                }
+
+                didUndo = true;
+
+            }
+
+            ///    	if(lastInOwnMancala == true)
+            //    	{
+            //           didUndo = true;
+
+            // 	}
+
+            System.out.println("playerA undo time left:" + playerA.getUndoTimeLeft());
+            System.out.println("playerB undo time left:" + playerB.getUndoTimeLeft());
+        }
     }
 
 
     /**
-     * XXXX
+     * initialize the stones
      */
     public void initializeStones() {
         for (int i = 0; i < 12; i++) {
@@ -413,10 +583,15 @@ public class MancalaModel {
         // do something
     }
 
+    /**
+     * initialize player A and B
+     */
+    public void initializePlayerAB() {
+        playerA = new MancalaPlayer();
+        playerB = new MancalaPlayer();
+    }
 
 }
-
-
 
 
 
