@@ -7,10 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Concrete strategy with another style for the Mancala Board
+/**Concrete strategy containing a SJSU-themed style for the Mancala board
  * @author Rui Yang, Sandro Sallenbach, and Stefan Do
- * @version CS151 Dr. Kim
+ *
  */
 public class SJSUBoradStyle implements BoardFormatter {
     @Override
@@ -39,7 +38,7 @@ public class SJSUBoradStyle implements BoardFormatter {
     }
     
     /**
-     * Gets the color blue for MancalaA
+     * Gets the color blue to style the MancalaBoard
      */
     public Color getColorA()
     {
@@ -47,7 +46,7 @@ public class SJSUBoradStyle implements BoardFormatter {
     }
     
     /**
-     * Gets the color gray for MancalaB
+     * Gets the color gray to style the MancalaBoard
      */
     public Color getColorB()
     {
@@ -55,7 +54,7 @@ public class SJSUBoradStyle implements BoardFormatter {
     }
     
     /**
-     * Get a reference of the shape for the Mancala Board
+     * Gets a reference of the shape for the style of the MancalaBoard
      */
     public RectangularShape getShape()
     {

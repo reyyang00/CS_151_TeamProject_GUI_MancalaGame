@@ -8,10 +8,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Concrete strategy that implements a different style for the Mancala Board
- * @author Rui Yang, Sandro Sallenbach, and Stefan Do 
- *
+/** Concrete strategy containing a USA-themed style for the Mancala board 
+ * @author Rui Yang, Sandro Sallenbach, and Stefan Do
+ * @version CS151 Dr. Kim 
  */
 public class USABoradStyle implements BoardFormatter {
 	   @Override
@@ -22,7 +21,7 @@ public class USABoradStyle implements BoardFormatter {
 
 	    }
 	   /**
-	    * Gets the color blue for MancalaA
+	    * Gets the color blue to style the Mancala board
 	    */
 	    public Color getColorA()
 	    {
@@ -30,7 +29,7 @@ public class USABoradStyle implements BoardFormatter {
 	    }
 	    
 	    /**
-	     * Gets the color red for MancalaB
+	     * Gets the color red to style the Mancala board
 	     */
 	    public Color getColorB()
 	    {
@@ -38,7 +37,7 @@ public class USABoradStyle implements BoardFormatter {
 	    }
 	    
 	    /**
-	     * Get a reference of the shape for the Mancala Board
+	     * Gets of reference of the shape for the style of the Mancala board
 	     */
 	    public RectangularShape getShape()
 	    {

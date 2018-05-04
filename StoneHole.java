@@ -7,8 +7,7 @@ import java.awt.geom.RectangularShape;
 
 import javax.swing.Icon;
 
-/**
- * This class is to design the stones used for the Mancala Board
+/** This class is to design the stones for the Mancala Board
  * @author Rui Yang, Sandro Sallenbach, and Stefan Do
  * @version CS151 Dr. Kim
  */
@@ -23,10 +22,10 @@ public class StoneHole
 //	private Color = Color.Red;
 	
 	/**
-	 * This method sets the design of the stones for each Mancala
-	 * @param a Color for Mancala A
-	 * @param b Color for Mancala B
-	 * @param s	Shape for the stones 
+	 * Sets the design of the stones for each Mancala Board 
+	 * @param a Color for MancalaA
+	 * @param b Color for MancalaB
+	 * @param s Shape for the stones 
 	 */
 	public void setSyle(Color a, Color b, RectangularShape s)
 	{
@@ -36,7 +35,7 @@ public class StoneHole
 	}
 	
 	/**
-	 * Initializing the number of stones to be 0
+	 * Initializing the number of stones to 0
 	 */
 	 public StoneHole()
 	 {
@@ -44,7 +43,7 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Draw method to create the stones
+	  * Drawing the stones 
 	  */
 	 public void draw(Graphics2D g2)
 	 {
@@ -95,7 +94,7 @@ public class StoneHole
 	 
 	 /**
 	  * Getter for the number of stones
-	  * @return	Number of stones
+	  * @return Number of stones
 	  */
 	 public int getNbStones()
 	 {
@@ -104,8 +103,8 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Setter used for setting the number of stones
-	  * @param nbStones	Number of stones
+	  * Setter for the number of stones
+	  * @param nbStones Number of stones
 	  */
 	 public void setNbStones(int nbStones)
 	 {
@@ -113,16 +112,16 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to increment the number of stones
+	  * Increments the number of stones
 	  */
 	 public void addStone()
 	 {
 		 numberOfStones++;
 	 }
 	 
-	 /**
-	  * Method used to draw one hole
-	  */
+     /**
+      * Draws 1 stone
+      */
 	 private void draw1(Graphics2D g2)
 	 {
 			Ellipse2D.Double point1 = new Ellipse2D.Double(28, 10, 4, 4);
@@ -131,7 +130,7 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to draw two holes
+	  * Draws 2 stones
 	  */
 	 private void draw2(Graphics2D g2)
 	 {
@@ -147,7 +146,7 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to draw three holes
+	  * Draws 3 stones
 	  */
 	 private void draw3(Graphics2D g2)
 	 {
@@ -165,7 +164,7 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to draw four holes
+	  * Draws 4 stones
 	  */
 	 private void draw4(Graphics2D g2)
 	 {
@@ -185,7 +184,8 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to draw five holes
+	  * Draws 5 stones
+	  * @param g2
 	  */
 	 private void draw5(Graphics2D g2)
 	 {
@@ -208,7 +208,7 @@ public class StoneHole
 	 }
 	 
 	 /**
-	  * Method used to draw six holes
+	  * Draws 6 stones 
 	  */
 	 private void draw6(Graphics2D g2)
 	 {
@@ -234,7 +234,7 @@ public class StoneHole
 	 }
 
 	 /**
-	  * Method used to draw more holes
+	  * Draws more than 6 stones
 	  */
 	 private void drawMore(Graphics2D g2)
 	 {

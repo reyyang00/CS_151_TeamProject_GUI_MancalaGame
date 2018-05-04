@@ -9,8 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Concrete strategy containing a plain style of the Mancala Board
+/** Concrete strategy containing a simple style for the Mancala board
  * @author Rui Yang, Sandro Sallenbach, and Stefan Do
  * @version CS151 Dr. Kim
  */
@@ -25,16 +24,16 @@ public class PlainBoardStyle implements BoardFormatter {
 
 	    }
 	   
-	   /**
-	    * Gets the color black for Mancala A
-	    */
+	    /**
+	     * Gets the color black for styling the MancalaBoard
+	     */
 	    public Color getColorA()
 	    {
 	    	return Color.BLACK;
 	    }
 	    
 	    /**
-	     * Gets the color black for Mancala B
+	     * Gets the color black for styling the MancalaBoard
 	     */
 	    public Color getColorB()
 	    {
@@ -42,7 +41,7 @@ public class PlainBoardStyle implements BoardFormatter {
 	    }
 	    
 	    /**
-	     * Gets a reference of the shape for the Mancala Board
+	     * Gets a reference of the shape for the MancalaBoard
 	     */
 	    public RectangularShape getShape()
 	    {
